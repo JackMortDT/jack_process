@@ -16,7 +16,7 @@ defmodule Jack.Documents.Upload do
     upload
     |> cast(attrs, [:filename, :size, :content_type, :hash])
     |> validate_required([:filename, :size, :content_type, :hash])
-    |> validate_number(:size, greater_that: 0)
+    |> validate_number(:size, greater_than: 0)
     |> validate_length(:hash, is: 64)
   end
 
