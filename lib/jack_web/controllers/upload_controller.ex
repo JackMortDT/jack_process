@@ -2,6 +2,7 @@ defmodule JackWeb.UploadController do
   use JackWeb, :controller
 
   alias Jack.Documents
+  alias Jack.Documents.Upload
 
   def index(conn, _params) do
     uploads = Documents.list_uploads()
@@ -21,5 +22,11 @@ defmodule JackWeb.UploadController do
         put_flash(conn, :error, "error upload file: #{inspect(reason)}")
         render(conn, "new.html")
     end
+  end
+
+  def show(conn, %{"id" => id}) do
+    upload = Documents.get_upload!(id)
+    local_path = Upload.local_path(upload.id, upload.filename)
+    send_download(conn, {:file, local_path}, filename: upload.filename)
   end
 end
