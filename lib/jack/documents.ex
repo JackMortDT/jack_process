@@ -37,4 +37,9 @@ defmodule Jack.Documents do
       end
     end
   end
+
+  def get_upload!(id) do
+    Upload
+    |> Repo.get!(id)
+  end
 end
