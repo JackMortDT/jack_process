@@ -76,4 +76,4 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 config :jack,
-  uploads_directory: "./jack"
+  uploads_directory: "./files"
