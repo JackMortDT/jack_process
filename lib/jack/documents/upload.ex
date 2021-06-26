@@ -7,6 +7,7 @@ defmodule Jack.Documents.Upload do
     field :filename, :string
     field :hash, :string
     field :size, :integer
+    field :thumbnail?, :boolean, source: :has_thumb
 
     timestamps()
   end
@@ -14,7 +15,7 @@ defmodule Jack.Documents.Upload do
   @doc false
   def changeset(upload, attrs) do
     upload
-    |> cast(attrs, [:filename, :size, :content_type, :hash])
+    |> cast(attrs, [:filename, :size, :content_type, :hash, :thumbnail?])
     |> validate_required([:filename, :size, :content_type, :hash])
     |> validate_number(:size, greater_than: 0)
     |> validate_length(:hash, is: 64)
@@ -39,4 +40,32 @@ defmodule Jack.Documents.Upload do
     [upload_directory(), "#{id}-#{filename}"]
     |> Path.join()
   end
+
+  def thumbnail_path(id) do
+    [upload_directory(), "thumb-#{id}-jpg"]
+    |> Path.join()
+  end
+
+   def mogrify_thumbnail(src_path, dst_path) do
+   try do
+     Mogrify.open(src_path)
+     |> Mogrify.resize_to_limit("300x300")
+     |> Mogrify.save(path: dst_path)
+   rescue
+     File.Error -> {:error, :invalid_src_path}
+     error -> {:error, error}
+   else
+     _image -> {:ok, dst_path}
+   end
+ end
+
+  def create_thumbnail(%__MODULE__{content_type: "image/" <> _img_type}=upload) do
+    original_path = local_path(upload.id, upload.filename)
+    thumb_path = thumbnail_path(upload.id)
+    {:ok, _} = mogrify_thumbnail(original_path, thumb_path)
+    changeset(upload, %{thumbnail?: true})
+  end
+
+def create_thumbnail(%__MODULE__{}=upload),
+	do: changeset(upload, %{})
 end
