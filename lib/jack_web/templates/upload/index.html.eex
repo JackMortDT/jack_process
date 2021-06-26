@@ -4,10 +4,10 @@
   <thead>
     <th>Thumbnail</th>
     <th>ID</th>
-    <th>Filename</th>
-    <th>Size</th>
-    <th>Type</th>
-    <th>Time</th>
+    <th>Nombre</th>
+    <th>Tamaño</th>
+    <th>Tipo</th>
+    <th>Fecha</th>
   </thead>
   <tbody>
 
