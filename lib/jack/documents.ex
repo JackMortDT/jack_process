@@ -21,14 +21,15 @@ defmodule Jack.Documents do
       with {:ok, %File.Stat{size: size}} <- File.stat(tmp_path),
         {:ok, upload} <-
           %Upload{} |> Upload.changeset(%{
-            filename: filename, content_type: content_type,
-            hash: hash, size: size })
-          |> Repo.insert(),
+            filename: filename,
+            content_type: content_type,
+            hash: hash,
+            size: size
+          }) |> Repo.insert(),
 
-        :ok <- File.cp(
-          tmp_path,
-          Upload.local_path(upload.id, filename)
-        )
+        :ok <- File.cp(tmp_path, Upload.local_path(upload.id, filename)),
+
+        {:ok, upload} <- Upload.create_thumbnail(upload) |> Repo.update()
 
       do
         upload

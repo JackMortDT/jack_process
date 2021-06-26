@@ -42,7 +42,7 @@ defmodule Jack.Documents.Upload do
   end
 
   def thumbnail_path(id) do
-    [upload_directory(), "thumb-#{id}-jpg"]
+    [upload_directory(), "thumb-#{id}.jpg"]
     |> Path.join()
   end
 
