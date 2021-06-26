@@ -17,7 +17,9 @@ defmodule JackWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/uploads", UploadController, only: [:index, :new, :create, :show]
+    resources "/uploads", UploadController, only: [:index, :new, :create, :show] do
+      get "/thumbnail", UploadController, :thumbnail, as: "thumbnail"
+    end
   end
 
   # Other scopes may use custom stacks.
