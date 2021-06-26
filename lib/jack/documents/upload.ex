@@ -16,5 +16,27 @@ defmodule Jack.Documents.Upload do
     upload
     |> cast(attrs, [:filename, :size, :content_type, :hash])
     |> validate_required([:filename, :size, :content_type, :hash])
+    |> validate_number(:size, greater_that: 0)
+    |> validate_length(:hash, is: 64)
+  end
+
+  def sha256(chunks_enum) do
+    chunks_enum
+    |> Enum.reduce(
+      :crypto.hash_init(:sha256),
+      &(:crypto.hash_update(&2, &1))
+    )
+    |> :crypto.hash_final()
+    |> Base.encode16()
+    |> String.downcase()
+  end
+
+  def upload_directory do
+    Application.get_env(:jack, :uploads_directory)
+  end
+
+  def local_path(id, filename) do
+    [upload_directory(), "#{id}-#{filename}"]
+    |> Path.join()
   end
 end
