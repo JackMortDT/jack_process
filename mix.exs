@@ -20,7 +20,7 @@ defmodule Jack.MixProject do
   def application do
     [
       mod: {Jack.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :sizeable, :xlsxir]
     ]
   end
 
@@ -47,6 +47,7 @@ defmodule Jack.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:mogrify, "~> 0.8.0"},
       {:xlsxir, "~> 1.6"},
+      {:sizeable, "~> 1.0"}
     ]
   end
 
