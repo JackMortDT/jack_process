@@ -22,6 +22,7 @@
         </td>
         <td><%= upload.id %></td>
         <td><%= upload.filename %></td>
+        <td><%= transform_size(upload.size) %></td>
         <td><%= upload.content_type %></td>
         <td><%= upload.inserted_at %></td>
         <td>
